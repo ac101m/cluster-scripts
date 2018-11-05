@@ -1,0 +1,7 @@
+[mac addresses for cluster nodes]
+name:			nic1:				nic2:
+FivesACrowd4 	68:B5:99:B5:39:22	68:B5:99:B5:39:23
+FivesACrowd3	78:E7:D1:61:EF:CE	78:E7:D1:61:EF:CF
+FivesACRowd2	98:4B:E1:73:92:5A	98:4B:E1:73:92:5B
+FivesACrowd1	78:E7:D1:61:EF:52	78:E7:D1:61:EF:53
+FivesACrowd0	68:B5:99:C8:ED:34	68:B5:99:C8:ED:35

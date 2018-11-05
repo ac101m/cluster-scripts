@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+
+
+import argparse
+from subprocess import call
+
+
+# Mac addresses for various NICs in the system
+nic1_mac = ["68:b5:99:c8:ed:34", "78:E7:D1:61:EF:52", "98:4B:E1:73:92:5A", "78:E7:D1:61:EF:CE", "68:B5:99:B5:39:22"]
+nic2_mac = ["68:b5:99:c8:ed:35", "78:E7:D1:61:EF:53", "98:4B:E1:73:92:5B", "78:E7:D1:61:EF:CF", "68:B5:99:B5:39:23"]
+
+
+def main():
+
+    # Take command line arguments
+    parser = argparse.ArgumentParser(description = 'Wake nodes on the cluster over ethernet.')
+    parser.add_argument('-n', '--nodes', type = int, nargs = '+', required = True,
+						help = 'List of remote nodes to wake up.')
+    ARGS = parser.parse_args()
+
+    # Send wake signals to all host mac addresses
+    for node in ARGS.nodes:
+        call(["wakeonlan", nic1_mac[node]])
+
+
+if __name__ == '__main__':
+    main()
