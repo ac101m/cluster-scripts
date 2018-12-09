@@ -12,18 +12,23 @@ nic2_macs = ["68:b5:99:c8:ed:35", "78:E7:D1:61:EF:53", "98:4B:E1:73:92:5B", "78:
 
 def main():
 
-    # Connected nic
-    macs = nic1_macs
-    node_numbers = []
-
     # Parse command line arguments
     parser = argparse.ArgumentParser(description = 'Wake nodes on the cluster over ethernet.')
+    parser.add_argument('-a', '--all', action = 'store_true', default = False, help = 'Wake all cluster nodes.')
     parser.add_argument('-n', '--nodes', type = int, nargs = '+', help = 'Wake the specified nodes in the cluster.')
     parser.add_argument('-c', '--count', type = int, help = 'Wake n nodes in the cluster, in descending order.')
     ARGS = parser.parse_args()
 
+    # Connected nic
+    macs = nic1_macs
+    node_numbers = []
+
+    # User tries to wake all hosts
+    if ARGS.all == True:
+        node_numbers = range(0, len(macs))
+
     # User specified node numbers manually
-    if ARGS.nodes != None:
+    elif ARGS.nodes != None:
         node_numbers = ARGS.nodes
 
     # User specified a count of nodes
