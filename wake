@@ -20,25 +20,24 @@ def main():
     ARGS = parser.parse_args()
 
     # Connected nic
-    macs = nic1_macs
-    node_numbers = []
+    all_macs = nic1_macs
+    macs = []
 
     # User tries to wake all hosts
     if ARGS.all == True:
-        node_numbers = range(0, len(macs))
+        macs = all_macs
 
     # User specified node numbers manually
     elif ARGS.nodes != None:
-        node_numbers = ARGS.nodes
+        for node_number in ARGS.nodes:
+            if(node_number < len(all_macs)):
+                macs.append(all_macs[node_number])
+            else:
+                print("Node %d out of range, ignoring." % node_number)
 
     # User specified a count of nodes
     elif ARGS.count != None:
-        for i in range(0, ARGS.count):
-            if i < len(macs):
-                node_numbers.append(i)
-            else:
-                print("Node count %d exceeds number of nodes, waking all nodes." % ARGS.count)
-                break
+        macs = all_macs[-ARGS.count:]
 
     # Nothing specified, do nothing.
     else:
@@ -46,11 +45,8 @@ def main():
         return
 
     # Wake the selected nodes
-    for node_number in node_numbers:
-        if node_number < len(macs):
-            call(["wakeonlan", macs[node_number]])
-        else:
-            print("Node %d out of range, ignoring." % node_number)
+    for mac in macs:
+        call(["wakeonlan", mac])
 
 
 if __name__ == '__main__':
