@@ -6,21 +6,46 @@ from subprocess import call
 
 
 # Mac addresses for various NICs in the system
-nic1_mac = ["68:b5:99:c8:ed:34", "78:E7:D1:61:EF:52", "98:4B:E1:73:92:5A", "78:E7:D1:61:EF:CE", "68:B5:99:B5:39:22"]
-nic2_mac = ["68:b5:99:c8:ed:35", "78:E7:D1:61:EF:53", "98:4B:E1:73:92:5B", "78:E7:D1:61:EF:CF", "68:B5:99:B5:39:23"]
+nic1_macs = ["68:b5:99:c8:ed:34", "78:E7:D1:61:EF:52", "98:4B:E1:73:92:5A", "78:E7:D1:61:EF:CE", "68:B5:99:B5:39:22"]
+nic2_macs = ["68:b5:99:c8:ed:35", "78:E7:D1:61:EF:53", "98:4B:E1:73:92:5B", "78:E7:D1:61:EF:CF", "68:B5:99:B5:39:23"]
 
 
 def main():
 
-    # Take command line arguments
+    # Connected nic
+    macs = nic1_macs
+    node_numbers = []
+
+    # Parse command line arguments
     parser = argparse.ArgumentParser(description = 'Wake nodes on the cluster over ethernet.')
-    parser.add_argument('-n', '--nodes', type = int, nargs = '+', required = True,
-						help = 'List of remote nodes to wake up.')
+    parser.add_argument('-n', '--nodes', type = int, nargs = '+', help = 'Wake the specified nodes in the cluster.')
+    parser.add_argument('-c', '--count', type = int, help = 'Wake n nodes in the cluster, in descending order.')
     ARGS = parser.parse_args()
 
-    # Send wake signals to all host mac addresses
-    for node in ARGS.nodes:
-        call(["wakeonlan", nic1_mac[node]])
+    # User specified node numbers manually
+    if ARGS.nodes != None:
+        node_numbers = ARGS.nodes
+
+    # User specified a count of nodes
+    elif ARGS.count != None:
+        for i in range(0, ARGS.count):
+            if i < len(macs):
+                node_numbers.append(i)
+            else:
+                print("Node count %d exceeds number of nodes, waking all nodes." % ARGS.count)
+                break
+
+    # Nothing specified, do nothing.
+    else:
+        print("No nodes specified, nothing to be done.")
+        return
+
+    # Wake the selected nodes
+    for node_number in node_numbers:
+        if node_number < len(macs):
+            call(["wakeonlan", macs[node_number]])
+        else:
+            print("Node %d out of range, ignoring." % node_number)
 
 
 if __name__ == '__main__':
