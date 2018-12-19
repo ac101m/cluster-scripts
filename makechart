@@ -40,13 +40,15 @@ def get_data_from_files(file_paths):
 		thisfile_data = []
 		print("Parsing %s..." % path)
 		with open(path) as data_file:
-			for i, line in enumerate(data_file):
-				if i == 1:
-					print("No file continuity checking done yet, must fix...")
-				elif i > 1:
-					col_values = list(filter(None, line.strip('\n').split(' ')))
-					thisfile_message_size.append(float(col_values[0]))
-					thisfile_data.append(float(col_values[1]))
+			data_lines = []
+			for line in data_file:
+				if len(line.strip(' \n\t')) != 0:
+					if line.strip(' \n\t')[0] != '#':
+						data_lines.append(line)
+			for line in data_lines:
+				col_values = list(filter(None, line.strip('\n').split(' ')))
+				thisfile_message_size.append(float(col_values[0]))
+				thisfile_data.append(float(col_values[1]))
 		message_size = thisfile_message_size
 		data.append(thisfile_data)
 	return message_size, data
