@@ -6,7 +6,7 @@ from subprocess import call
 
 
 # Host names for the nodes
-all_nodes = ["FivesACrowd0", "FivesACrowd1", "FivesACrowd2", "FivesACrowd3", "FivesACrowd4"]
+all_nodes = ["fac0.lan", "fac1.lan", "fac2.lan", "fac3.lan", "fac4.lan"]
 
 
 def main():
